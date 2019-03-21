@@ -1,0 +1,31 @@
+{
+  "name": "release-tracker",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/furknyavuz/release-tracker.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/furknyavuz/release-tracker/issues"
+  },
+  "homepage": "https://github.com/furknyavuz/release-tracker#readme",
+  "dependencies": {
+    "body-parser": "1.7.0",
+    "express": "^4.8.7",
+    "jsonwebtoken": "^8.5.1",
+    "moment": "^2.17.1",
+    "moment-timezone": "^0.5.13",
+    "mongoose": "^5.1.1",
+    "node-uuid": "^1.4.8",
+    "swagger-ui-express": "^2.0.13",
+    "sync-request": "^4.0.2"
+  }
+}
