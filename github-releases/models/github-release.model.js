@@ -1,5 +1,8 @@
 const mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/release-tracker', {useNewUrlParser: true});
+
+const MONGODB_URI = process.env.MONGODB_URI ||'mongodb://localhost/release-tracker';
+
+mongoose.connect(MONGODB_URI, {useNewUrlParser: true});
 const Schema = mongoose.Schema;
 
 const gitHubReleaseSchema = new Schema({
