@@ -1,5 +1,5 @@
 module.exports = {
-    "port": 3000,
+    "port": process.env.PORT || 3000,
     "appEndpoint": "http://localhost:3000",
     "apiEndpoint": "http://localhost:3000",
     "jwt_secret": "myS33!!creeeT",
