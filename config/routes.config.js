@@ -1,32 +1,38 @@
-const GithubController = require('./controllers/github.controller');
-const UsersController = require('./controllers/users.controller');
-const PermissionMiddleware = require('../common/middlewares/auth.permission.middleware');
-const ValidationMiddleware = require('../common/middlewares/auth.validation.middleware');
-const config = require('../common/config/env.config');
+const UsersController = require('../users/controllers/users.controller');
+const GitHubController = require('../github-releases/controllers/github.controller');
+const PermissionMiddleware = require('../authorization/middlewares/auth.permission.middleware');
+const ValidationMiddleware = require('../authorization/middlewares/auth.validation.middleware');
+const config = require('./env.config');
 
 const ADMIN = config.permissionLevels.ADMIN;
 const PAID = config.permissionLevels.PAID_USER;
 const FREE = config.permissionLevels.NORMAL_USER;
 
 exports.routesConfig = function (app) {
+    app.post('/github-releases', [
+        ValidationMiddleware.validJWTNeeded,
+        PermissionMiddleware.minimumPermissionLevelRequired(ADMIN),
+        GitHubController.insert
+    ]);
     app.post('/users', [
-        GithubController.update(),
+        ValidationMiddleware.validJWTNeeded,
+        PermissionMiddleware.minimumPermissionLevelRequired(ADMIN),
         UsersController.insert
     ]);
     app.get('/users', [
         ValidationMiddleware.validJWTNeeded,
-        PermissionMiddleware.minimumPermissionLevelRequired(PAID),
+        PermissionMiddleware.minimumPermissionLevelRequired(ADMIN),
         UsersController.list
     ]);
     app.get('/users/:userId', [
         ValidationMiddleware.validJWTNeeded,
-        PermissionMiddleware.minimumPermissionLevelRequired(FREE),
+        PermissionMiddleware.minimumPermissionLevelRequired(ADMIN),
         PermissionMiddleware.onlySameUserOrAdminCanDoThisAction,
         UsersController.getById
     ]);
     app.patch('/users/:userId', [
         ValidationMiddleware.validJWTNeeded,
-        PermissionMiddleware.minimumPermissionLevelRequired(FREE),
+        PermissionMiddleware.minimumPermissionLevelRequired(ADMIN),
         PermissionMiddleware.onlySameUserOrAdminCanDoThisAction,
         UsersController.patchById
     ]);

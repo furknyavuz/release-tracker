@@ -60,6 +60,10 @@ exports.list = (perPage, page) => {
     });
 };
 
+exports.count = function(cb) {
+    return GitHubRelease.collection.countDocuments({}, cb);
+};
+
 exports.patchGitHubRelease = (id, gitHubReleaseData) => {
     return new Promise((resolve, reject) => {
         GitHubRelease.findById(id, function (err, gitHubRelease) {

@@ -1,11 +1,12 @@
-const config = require('./common/config/env.config.js');
+const config = require('./config/env.config.js');
 
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
 
 const AuthorizationRouter = require('./authorization/routes.config');
-const UsersRouter = require('./users/routes.config');
+const GitHubCronController = require('./cron/github-cron.controller');
+const Router = require('./config/routes.config');
 
 app.use(function (req, res, next) {
     res.header('Access-Control-Allow-Origin', '*');
@@ -22,8 +23,8 @@ app.use(function (req, res, next) {
 
 app.use(bodyParser.json());
 AuthorizationRouter.routesConfig(app);
-UsersRouter.routesConfig(app);
-
+Router.routesConfig(app);
+GitHubCronController.startCronJobs();
 
 app.listen(config.port, function () {
     console.log('app listening at port %s', config.port);
