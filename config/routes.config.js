@@ -15,8 +15,6 @@ exports.routesConfig = function (app) {
         GitHubController.insert
     ]);
     app.post('/users', [
-        ValidationMiddleware.validJWTNeeded,
-        PermissionMiddleware.minimumPermissionLevelRequired(ADMIN),
         UsersController.insert
     ]);
     app.get('/users', [
