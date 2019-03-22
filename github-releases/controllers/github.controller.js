@@ -10,6 +10,21 @@ exports.insert = (req, res) => {
         });
 };
 
+exports.list = (req, res) => {
+    let limit = req.query.limit && req.query.limit <= 1000 ? parseInt(req.query.limit) : 1000;
+    let page = 0;
+    if (req.query) {
+        if (req.query.page) {
+            req.query.page = parseInt(req.query.page);
+            page = Number.isInteger(req.query.page) ? req.query.page : 0;
+        }
+    }
+    GitHubReleaseModel.list(limit, page)
+        .then((result) => {
+            res.status(200).send(result);
+        })
+};
+
 latestRelease = function (owner, name, token) {
     console.log(`Getting latest release for: http://github.com/${owner}/${name}`);
 

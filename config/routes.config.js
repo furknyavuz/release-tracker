@@ -14,6 +14,9 @@ exports.routesConfig = function (app) {
         PermissionMiddleware.minimumPermissionLevelRequired(ADMIN),
         GitHubController.insert
     ]);
+    app.get('/github-releases', [
+        GitHubController.list
+    ]);
     app.post('/users', [
         UsersController.insert
     ]);
