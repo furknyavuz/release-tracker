@@ -6,6 +6,7 @@ const bodyParser = require('body-parser');
 
 const AuthorizationRouter = require('./authorization/routes.config');
 const GitHubCronController = require('./cron/github-cron.controller');
+const GatsbyCronController = require('./cron/gatsby-cron.controller');
 const Router = require('./config/routes.config');
 
 app.use(function (req, res, next) {
@@ -25,6 +26,7 @@ app.use(bodyParser.json());
 AuthorizationRouter.routesConfig(app);
 Router.routesConfig(app);
 GitHubCronController.startCronJobs();
+GatsbyCronController.startCronJobs();
 
 app.listen(config.port, function () {
     console.log('app listening at port %s', config.port);
