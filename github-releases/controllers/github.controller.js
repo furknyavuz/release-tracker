@@ -28,7 +28,7 @@ exports.list = (req, res) => {
 latestRelease = function (owner, name, token) {
     console.log(`Getting latest release for: http://github.com/${owner}/${name}`);
 
-    const query = `{ \"query\": \"query { repository(owner:\\\"${owner}\\\", name:\\\"${name}\\\") { homepageUrl description releases(first:1, orderBy: {field: CREATED_AT, direction: DESC}) { nodes { createdAt resourcePath tagName } } watchers(first: 1) { totalCount } stargazers(first: 1) { totalCount } } }\" }`;
+    const query = `{ \"query\": \"query { organization(login: \\\"${owner}\\\") { avatarUrl } user(login: \\\"${owner}\\\") { avatarUrl } repository(owner:\\\"${owner}\\\", name:\\\"${name}\\\") { homepageUrl description releases(first:1, orderBy: {field: CREATED_AT, direction: DESC}) { nodes { createdAt resourcePath tagName } } watchers(first: 1) { totalCount } stargazers(first: 1) { totalCount } } }\" }`;
 
     request.post({
         headers: {'User-Agent': 'Release Tracker', 'Authorization': `Bearer ${token}`},
@@ -44,6 +44,7 @@ latestRelease = function (owner, name, token) {
         let description = '';
         let watchersCount = 0;
         let stargazersCount = 0;
+        let avatarUrl = '';
 
         if (bodyJson && bodyJson.data && bodyJson.data.repository && bodyJson.data.repository.releases
             && bodyJson.data.repository.releases.nodes
@@ -57,6 +58,11 @@ latestRelease = function (owner, name, token) {
             description = bodyJson.data.repository.description;
             watchersCount = bodyJson.data.repository.watchers.totalCount;
             stargazersCount = bodyJson.data.repository.stargazers.totalCount;
+            if (bodyJson.data.organization && bodyJson.data.organization.avatarUrl) {
+                avatarUrl = bodyJson.data.organization.avatarUrl;
+            } else if (bodyJson.data.user && bodyJson.data.user.avatarUrl) {
+                avatarUrl = bodyJson.data.user.avatarUrl;
+            }
         }
         const gitHubReleaseData = {
             owner: owner,
@@ -67,7 +73,8 @@ latestRelease = function (owner, name, token) {
             homepageUrl: homepageUrl,
             description: description,
             watchersCount: watchersCount,
-            stargazersCount: stargazersCount
+            stargazersCount: stargazersCount,
+            avatarUrl: avatarUrl
         };
 
         GitHubReleaseModel.findByOwnerAndName(owner, name)
@@ -95,7 +102,7 @@ exports.update = () => {
             GitHubReleaseModel.list(pageSize, i)
                 .then((result) => {
                     for (let j = 0; j < result.length; j++) {
-                        latestRelease(result[j].owner, result[j].name, '12116601fe51998baa865e75f335e315e658613a');
+                        latestRelease(result[j].owner, result[j].name, '2fa1cce9d1485592425ef9297e93a2f1d4ce7b24');
                     }
                 })
         }

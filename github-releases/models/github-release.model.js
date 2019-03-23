@@ -14,7 +14,8 @@ const gitHubReleaseSchema = new Schema({
     homepageUrl: String,
     description: String,
     watchersCount: Number,
-    stargazersCount: Number
+    stargazersCount: Number,
+    avatarUrl: String
 });
 
 gitHubReleaseSchema.virtual('id').get(function () {
