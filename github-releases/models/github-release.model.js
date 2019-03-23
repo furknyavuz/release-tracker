@@ -12,7 +12,9 @@ const gitHubReleaseSchema = new Schema({
     resourcePath: String,
     tagName: String,
     homepageUrl: String,
-    description: String
+    description: String,
+    watchersCount: Number,
+    stargazersCount: Number
 });
 
 gitHubReleaseSchema.virtual('id').get(function () {

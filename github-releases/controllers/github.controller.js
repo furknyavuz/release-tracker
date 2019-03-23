@@ -28,7 +28,7 @@ exports.list = (req, res) => {
 latestRelease = function (owner, name, token) {
     console.log(`Getting latest release for: http://github.com/${owner}/${name}`);
 
-    const query = `{ \"query\": \"query { repository(owner:\\\"${owner}\\\", name:\\\"${name}\\\") { homepageUrl description releases(first:1, orderBy: {field: CREATED_AT, direction: DESC}) { nodes { createdAt resourcePath tagName } } } }\" }`;
+    const query = `{ \"query\": \"query { repository(owner:\\\"${owner}\\\", name:\\\"${name}\\\") { homepageUrl description releases(first:1, orderBy: {field: CREATED_AT, direction: DESC}) { nodes { createdAt resourcePath tagName } } watchers(first: 1) { totalCount } stargazers(first: 1) { totalCount } } }\" }`;
 
     request.post({
         headers: {'User-Agent': 'Release Tracker', 'Authorization': `Bearer ${token}`},
@@ -42,15 +42,21 @@ latestRelease = function (owner, name, token) {
         let tagName = '';
         let homepageUrl = '';
         let description = '';
+        let watchersCount = 0;
+        let stargazersCount = 0;
 
         if (bodyJson && bodyJson.data && bodyJson.data.repository && bodyJson.data.repository.releases
             && bodyJson.data.repository.releases.nodes
-            && bodyJson.data.repository.releases.nodes.length > 0) {
+            && bodyJson.data.repository.releases.nodes.length > 0
+            && bodyJson.data.repository.watchers
+            && bodyJson.data.repository.stargazers) {
             createdAt = bodyJson.data.repository.releases.nodes[0].createdAt;
             resourcePath = bodyJson.data.repository.releases.nodes[0].resourcePath;
             tagName = bodyJson.data.repository.releases.nodes[0].tagName;
             homepageUrl = bodyJson.data.repository.homepageUrl;
             description = bodyJson.data.repository.description;
+            watchersCount = bodyJson.data.repository.watchers.totalCount;
+            stargazersCount = bodyJson.data.repository.stargazers.totalCount;
         }
         const gitHubReleaseData = {
             owner: owner,
@@ -59,7 +65,9 @@ latestRelease = function (owner, name, token) {
             resourcePath: resourcePath,
             tagName: tagName,
             homepageUrl: homepageUrl,
-            description: description
+            description: description,
+            watchersCount: watchersCount,
+            stargazersCount: stargazersCount
         };
 
         GitHubReleaseModel.findByOwnerAndName(owner, name)
