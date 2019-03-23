@@ -28,7 +28,7 @@ exports.list = (req, res) => {
 latestRelease = function (owner, name, token) {
     console.log(`Getting latest release for: http://github.com/${owner}/${name}`);
 
-    const query = `{ \"query\": \"query { repository(owner:\\\"${owner}\\\", name:\\\"${name}\\\") { releases(first:1, orderBy: {field: CREATED_AT, direction: DESC}) { nodes { createdAt resourcePath tagName } } } }\" }`;
+    const query = `{ \"query\": \"query { repository(owner:\\\"${owner}\\\", name:\\\"${name}\\\") { homepageUrl description releases(first:1, orderBy: {field: CREATED_AT, direction: DESC}) { nodes { createdAt resourcePath tagName } } } }\" }`;
 
     request.post({
         headers: {'User-Agent': 'Release Tracker', 'Authorization': `Bearer ${token}`},
@@ -40,6 +40,8 @@ latestRelease = function (owner, name, token) {
         let createdAt = '';
         let resourcePath = '';
         let tagName = '';
+        let homepageUrl = '';
+        let description = '';
 
         if (bodyJson && bodyJson.data && bodyJson.data.repository && bodyJson.data.repository.releases
             && bodyJson.data.repository.releases.nodes
@@ -47,13 +49,17 @@ latestRelease = function (owner, name, token) {
             createdAt = bodyJson.data.repository.releases.nodes[0].createdAt;
             resourcePath = bodyJson.data.repository.releases.nodes[0].resourcePath;
             tagName = bodyJson.data.repository.releases.nodes[0].tagName;
+            homepageUrl = bodyJson.data.repository.homepageUrl;
+            description = bodyJson.data.repository.description;
         }
         const gitHubReleaseData = {
             owner: owner,
             name: name,
             createdAt: createdAt,
             resourcePath: resourcePath,
-            tagName: tagName
+            tagName: tagName,
+            homepageUrl: homepageUrl,
+            description: description
         };
 
         GitHubReleaseModel.findByOwnerAndName(owner, name)

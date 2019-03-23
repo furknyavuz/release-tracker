@@ -10,7 +10,9 @@ const gitHubReleaseSchema = new Schema({
     name: String,
     createdAt: String,
     resourcePath: String,
-    tagName: String
+    tagName: String,
+    homepageUrl: String,
+    description: String
 });
 
 gitHubReleaseSchema.virtual('id').get(function () {
