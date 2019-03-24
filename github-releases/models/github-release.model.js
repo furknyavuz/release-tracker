@@ -69,6 +69,21 @@ exports.list = (perPage, page) => {
     });
 };
 
+exports.listByGroup = (perPage, page, group) => {
+    return new Promise((resolve, reject) => {
+        GitHubRelease.find({group: group})
+            .limit(perPage)
+            .skip(perPage * page)
+            .exec(function (err, users) {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(users);
+                }
+            })
+    });
+};
+
 exports.groupList = () => {
     return new Promise((resolve, reject) => {
         GitHubRelease.distinct("group")

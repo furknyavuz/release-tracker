@@ -17,6 +17,21 @@ exports.groupList = (req, res) => {
         })
 };
 
+exports.listByGroup = (req, res) => {
+    let limit = req.query.limit && req.query.limit <= 1000 ? parseInt(req.query.limit) : 1000;
+    let page = 0;
+    if (req.query) {
+        if (req.query.page) {
+            req.query.page = parseInt(req.query.page);
+            page = Number.isInteger(req.query.page) ? req.query.page : 0;
+        }
+    }
+    GitHubReleaseModel.listByGroup(limit, page, req.query.group)
+        .then((result) => {
+            res.status(200).send(result);
+        })
+};
+
 exports.list = (req, res) => {
     let limit = req.query.limit && req.query.limit <= 1000 ? parseInt(req.query.limit) : 1000;
     let page = 0;
