@@ -17,6 +17,14 @@ exports.routesConfig = function (app) {
     app.get('/github-releases', [
         GitHubController.list
     ]);
+    app.get('/github-releases/group', [
+        GitHubController.groupList
+    ]);
+    app.patch('/github-releases/:gitHubReleaseId', [
+        ValidationMiddleware.validJWTNeeded,
+        PermissionMiddleware.minimumPermissionLevelRequired(ADMIN),
+        GitHubController.patchById
+    ]);
     app.post('/users', [
         UsersController.insert
     ]);

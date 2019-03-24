@@ -15,7 +15,8 @@ const gitHubReleaseSchema = new Schema({
     description: String,
     watchersCount: Number,
     stargazersCount: Number,
-    avatarUrl: String
+    avatarUrl: String,
+    group: String
 });
 
 gitHubReleaseSchema.virtual('id').get(function () {
@@ -58,6 +59,19 @@ exports.list = (perPage, page) => {
         GitHubRelease.find()
             .limit(perPage)
             .skip(perPage * page)
+            .exec(function (err, users) {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(users);
+                }
+            })
+    });
+};
+
+exports.groupList = () => {
+    return new Promise((resolve, reject) => {
+        GitHubRelease.distinct("group")
             .exec(function (err, users) {
                 if (err) {
                     reject(err);

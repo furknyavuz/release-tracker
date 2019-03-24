@@ -10,6 +10,13 @@ exports.insert = (req, res) => {
         });
 };
 
+exports.groupList = (req, res) => {
+    GitHubReleaseModel.groupList()
+        .then((result) => {
+            res.status(200).send(result);
+        })
+};
+
 exports.list = (req, res) => {
     let limit = req.query.limit && req.query.limit <= 1000 ? parseInt(req.query.limit) : 1000;
     let page = 0;
@@ -23,6 +30,15 @@ exports.list = (req, res) => {
         .then((result) => {
             res.status(200).send(result);
         })
+};
+
+exports.patchById = (req, res) => {
+
+    GitHubReleaseModel.patchGitHubRelease(req.params.gitHubReleaseId, req.body)
+        .then((result) => {
+            res.status(204).send({});
+        });
+
 };
 
 latestRelease = function (owner, name, token) {
