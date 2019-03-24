@@ -1,5 +1,6 @@
 const UsersController = require('../users/controllers/users.controller');
-const GitHubController = require('../github-releases/controllers/github.controller');
+const GitHubController = require('../github-releases/controllers/github-release.controller');
+const GitHubReleaseGroupController = require('../github-releases/controllers/github-release-group.controller');
 const PermissionMiddleware = require('../authorization/middlewares/auth.permission.middleware');
 const ValidationMiddleware = require('../authorization/middlewares/auth.validation.middleware');
 const config = require('./env.config');
@@ -14,11 +15,16 @@ exports.routesConfig = function (app) {
         PermissionMiddleware.minimumPermissionLevelRequired(ADMIN),
         GitHubController.insert
     ]);
+    app.post('/github-releases/group', [
+        ValidationMiddleware.validJWTNeeded,
+        PermissionMiddleware.minimumPermissionLevelRequired(ADMIN),
+        GitHubReleaseGroupController.insert
+    ]);
     app.get('/github-releases', [
         GitHubController.listByGroup
     ]);
     app.get('/github-releases/group', [
-        GitHubController.groupList
+        GitHubReleaseGroupController.list
     ]);
     app.patch('/github-releases/:gitHubReleaseId', [
         ValidationMiddleware.validJWTNeeded,
