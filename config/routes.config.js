@@ -15,9 +15,6 @@ exports.routesConfig = function (app) {
         GitHubController.insert
     ]);
     app.get('/github-releases', [
-        GitHubController.list
-    ]);
-    app.get('/github-releases', [
         GitHubController.listByGroup
     ]);
     app.get('/github-releases/group', [
