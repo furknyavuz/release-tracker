@@ -94,29 +94,29 @@ latestRelease = function (owner, name, token) {
             } else if (bodyJson.data.user && bodyJson.data.user.avatarUrl) {
                 avatarUrl = bodyJson.data.user.avatarUrl;
             }
-        }
-        const gitHubReleaseData = {
-            owner: owner,
-            name: name,
-            createdAt: createdAt,
-            resourcePath: resourcePath,
-            tagName: tagName,
-            homepageUrl: homepageUrl,
-            description: description,
-            watchersCount: watchersCount,
-            stargazersCount: stargazersCount,
-            avatarUrl: avatarUrl
-        };
+            const gitHubReleaseData = {
+                owner: owner,
+                name: name,
+                createdAt: createdAt,
+                resourcePath: resourcePath,
+                tagName: tagName,
+                homepageUrl: homepageUrl,
+                description: description,
+                watchersCount: watchersCount,
+                stargazersCount: stargazersCount,
+                avatarUrl: avatarUrl
+            };
 
-        GitHubReleaseModel.findByOwnerAndName(owner, name)
-            .then((oldGitHubRelease) => {
-                if (!oldGitHubRelease[0]) {
-                    GitHubReleaseModel.createGitHubRelease(gitHubReleaseData);
-                } else {
-                    GitHubReleaseModel.patchGitHubRelease(oldGitHubRelease[0].id, gitHubReleaseData);
-                }
-                console.log(`Got latest release for: http://github.com${gitHubReleaseData.resourcePath}`);
-            });
+            GitHubReleaseModel.findByOwnerAndName(owner, name)
+                .then((oldGitHubRelease) => {
+                    if (!oldGitHubRelease[0]) {
+                        GitHubReleaseModel.createGitHubRelease(gitHubReleaseData);
+                    } else {
+                        GitHubReleaseModel.patchGitHubRelease(oldGitHubRelease[0].id, gitHubReleaseData);
+                    }
+                    console.log(`Got latest release for: http://github.com${gitHubReleaseData.resourcePath}`);
+                });
+        }
     });
 };
 
