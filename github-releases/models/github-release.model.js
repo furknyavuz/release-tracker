@@ -11,6 +11,7 @@ const gitHubReleaseSchema = new Schema({
     createdAt: String,
     resourcePath: String,
     tagName: String,
+    releaseDescription: String,
     homepageUrl: String,
     description: String,
     watchersCount: Number,

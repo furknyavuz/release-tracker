@@ -59,7 +59,7 @@ exports.patchById = (req, res) => {
 latestRelease = function (owner, name, token) {
     console.log(`Getting latest release for: http://github.com/${owner}/${name}`);
 
-    const query = `{ \"query\": \"query { organization(login: \\\"${owner}\\\") { avatarUrl } user(login: \\\"${owner}\\\") { avatarUrl } repository(owner:\\\"${owner}\\\", name:\\\"${name}\\\") { homepageUrl description releases(first:1, orderBy: {field: CREATED_AT, direction: DESC}) { nodes { createdAt resourcePath tagName } } watchers(first: 1) { totalCount } stargazers(first: 1) { totalCount } } }\" }`;
+    const query = `{ \"query\": \"query { organization(login: \\\"${owner}\\\") { avatarUrl } user(login: \\\"${owner}\\\") { avatarUrl } repository(owner:\\\"${owner}\\\", name:\\\"${name}\\\") { homepageUrl description releases(first:1, orderBy: {field: CREATED_AT, direction: DESC}) { nodes { createdAt resourcePath tagName description } } watchers(first: 1) { totalCount } stargazers(first: 1) { totalCount } } }\" }`;
 
     request.post({
         headers: {'User-Agent': 'Release Tracker', 'Authorization': `Bearer ${token}`},
@@ -71,6 +71,7 @@ latestRelease = function (owner, name, token) {
         let createdAt = '';
         let resourcePath = '';
         let tagName = '';
+        let releaseDescription = '';
         let homepageUrl = '';
         let description = '';
         let watchersCount = 0;
@@ -85,6 +86,7 @@ latestRelease = function (owner, name, token) {
             createdAt = bodyJson.data.repository.releases.nodes[0].createdAt;
             resourcePath = bodyJson.data.repository.releases.nodes[0].resourcePath;
             tagName = bodyJson.data.repository.releases.nodes[0].tagName;
+            releaseDescription = bodyJson.data.repository.releases.nodes[0].description;
             homepageUrl = bodyJson.data.repository.homepageUrl;
             description = bodyJson.data.repository.description;
             watchersCount = bodyJson.data.repository.watchers.totalCount;
@@ -100,6 +102,7 @@ latestRelease = function (owner, name, token) {
                 createdAt: createdAt,
                 resourcePath: resourcePath,
                 tagName: tagName,
+                releaseDescription: releaseDescription,
                 homepageUrl: homepageUrl,
                 description: description,
                 watchersCount: watchersCount,
