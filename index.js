@@ -25,7 +25,6 @@ app.use(bodyParser.json());
 AuthorizationRouter.routesConfig(app);
 Router.routesConfig(app);
 GitHubCronController.startCronJobs();
-GatsbyCronController.startCronJobs();
 
 app.listen(config.port, function () {
     console.log('app listening at port %s', config.port);
