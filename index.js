@@ -6,7 +6,6 @@ const bodyParser = require('body-parser');
 
 const AuthorizationRouter = require('./authorization/routes.config');
 const GitHubCronController = require('./cron/github-cron.controller');
-const GatsbyCronController = require('./cron/gatsby-cron.controller');
 const Router = require('./config/routes.config');
 
 app.use(function (req, res, next) {
