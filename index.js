@@ -4,8 +4,8 @@ const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
 
-const AuthorizationRouter = require('./authorization/routes.config');
-const GitHubCronController = require('./cron/github-cron.controller');
+const AuthorizationRouter = require('./config/routes.config');
+const GitHubCronController = require('./cron/cron.controller');
 const Router = require('./config/routes.config');
 
 app.use(function (req, res, next) {

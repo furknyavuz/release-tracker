@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
+const Config = require('../config/env.config');
 
-const MONGODB_URI = process.env.MONGODB_URI ||'mongodb://localhost/release-tracker';
+const MONGODB_URI = Config.mongoDbUri;
 
 mongoose.connect(MONGODB_URI, {useNewUrlParser: true});
 const Schema = mongoose.Schema;
@@ -14,8 +15,6 @@ const gitHubReleaseSchema = new Schema({
     releaseDescription: String,
     homepageUrl: String,
     description: String,
-    watchersCount: Number,
-    stargazersCount: Number,
     avatarUrl: String,
     group: String,
     topics: []
@@ -56,11 +55,9 @@ exports.createGitHubRelease = (gitHubReleaseData) => {
     return gitHubRelease.save();
 };
 
-exports.list = (perPage, page) => {
+exports.list = () => {
     return new Promise((resolve, reject) => {
         GitHubRelease.find()
-            .limit(perPage)
-            .skip(perPage * page)
             .exec(function (err, users) {
                 if (err) {
                     reject(err);

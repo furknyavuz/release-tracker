@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
+const Config = require('../config/env.config');
 
-const MONGODB_URI = process.env.MONGODB_URI ||'mongodb://localhost/release-tracker';
+const MONGODB_URI = Config.mongoDbUri;
 
 mongoose.connect(MONGODB_URI, {useNewUrlParser: true});
 const Schema = mongoose.Schema;

@@ -1,4 +1,4 @@
-const GitHubReleaseGroupModel = require('../models/github-release-group.model');
+const GitHubReleaseGroupModel = require('../model/github-release-group.model');
 
 exports.insert = (req, res) => {
     GitHubReleaseGroupModel.createGitHubReleaseGroup(req.body)

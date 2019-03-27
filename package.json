@@ -18,9 +18,11 @@
   },
   "homepage": "https://github.com/furknyavuz/release-tracker#readme",
   "dependencies": {
+    "axios": "^0.18.0",
     "body-parser": "1.7.0",
     "cron": "^1.7.0",
     "express": "^4.8.7",
+    "gql-query-builder": "^3.0.2",
     "jsonwebtoken": "^8.5.1",
     "moment": "^2.17.1",
     "moment-timezone": "^0.5.13",

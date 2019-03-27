@@ -1,8 +1,6 @@
-const config = require('../../config/env.config');
+const Config = require('../config/env.config');
 
-const ADMIN = config.permissionLevels.ADMIN;
-const PAID = config.permissionLevels.PAID_USER;
-const FREE = config.permissionLevels.NORMAL_USER;
+const ADMIN = Config.permissionLevels.ADMIN;
 
 exports.minimumPermissionLevelRequired = (required_permission_level) => {
     return (req, res, next) => {

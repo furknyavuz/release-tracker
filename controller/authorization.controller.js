@@ -1,13 +1,11 @@
-const jwtSecret = require('../../config/env.config.js').jwt_secret,
-    jwt = require('jsonwebtoken');
-const crypto = require('crypto');
-const uuid = require('node-uuid');
+const jwtSecret = require('../config/env.config.js').jwt_secret, jwt = require('jsonwebtoken');
+const Crypto = require('crypto');
 
 exports.login = (req, res) => {
     try {
         let refreshId = req.body.userId + jwtSecret;
-        let salt = crypto.randomBytes(16).toString('base64');
-        let hash = crypto.createHmac('sha512', salt).update(refreshId).digest("base64");
+        let salt = Crypto.randomBytes(16).toString('base64');
+        let hash = Crypto.createHmac('sha512', salt).update(refreshId).digest("base64");
         req.body.refreshKey = salt;
         let token = jwt.sign(req.body, jwtSecret);
         let b = new Buffer(hash);
