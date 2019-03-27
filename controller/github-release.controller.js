@@ -64,9 +64,7 @@ async function updateDatabase(responseData, owner, name) {
     let tagName = '';
     let releaseDescription = '';
     let homepageUrl = '';
-    let description = '';
-    let watchersCount = 0;
-    let stargazersCount = 0;
+    let repositoryDescription = '';
     let avatarUrl = '';
     let topics = [];
 
@@ -79,7 +77,7 @@ async function updateDatabase(responseData, owner, name) {
         tagName = responseData.data.repository.releases.nodes[0].tagName;
         releaseDescription = responseData.data.repository.releases.nodes[0].description;
         homepageUrl = responseData.data.repository.homepageUrl;
-        description = responseData.data.repository.description;
+        repositoryDescription = responseData.data.repository.description;
         topics = responseData.data.repository.repositoryTopics.nodes;
 
         if (responseData.data.organization && responseData.data.organization.avatarUrl) {
@@ -95,7 +93,7 @@ async function updateDatabase(responseData, owner, name) {
             tagName: tagName,
             releaseDescription: releaseDescription,
             homepageUrl: homepageUrl,
-            description: description,
+            repositoryDescription: repositoryDescription,
             avatarUrl: avatarUrl,
             topics: topics
         };
@@ -129,6 +127,8 @@ async function getLatestRelease(release) {
                 avatarUrl
             }
             repository(owner: "${owner}", name: "${name}") {
+                homepageUrl
+                description 
                 releases(first: 1, orderBy: {field: CREATED_AT, direction: DESC}) {
                     nodes {
                         createdAt

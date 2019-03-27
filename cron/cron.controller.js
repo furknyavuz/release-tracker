@@ -20,7 +20,7 @@ function updateDaily() {
 }
 
 exports.startCronJobs = function () {
-    new CronJob('0 0 * * *', function () {
+    new CronJob('* * * * *', function () {
         updateDaily();
     }, null, true, 'UTC');
 };
