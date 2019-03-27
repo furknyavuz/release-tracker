@@ -25,12 +25,14 @@ exports.routesConfig = function (app) {
         AuthorizationController.login
     ]);
 
+    // Inserting new repositories only allowed for admin
     app.post('/github-releases', [
         ValidationMiddleware.validJWTNeeded,
         PermissionMiddleware.minimumPermissionLevelRequired(ADMIN),
         GitHubController.insert
     ]);
 
+    // Inserting new groups only allowed for admin
     app.post('/github-releases/group', [
         ValidationMiddleware.validJWTNeeded,
         PermissionMiddleware.minimumPermissionLevelRequired(ADMIN),
@@ -52,6 +54,8 @@ exports.routesConfig = function (app) {
     ]);
 
     app.post('/users', [
+        ValidationMiddleware.validJWTNeeded,
+        PermissionMiddleware.minimumPermissionLevelRequired(ADMIN),
         UsersController.insert
     ]);
 
