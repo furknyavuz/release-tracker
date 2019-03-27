@@ -3,12 +3,12 @@ const CronJob = require('cron').CronJob;
 const Axios = require('axios');
 const Config = require('../config/env.config');
 
-const GATSBY_BUILD_URL = Config.gatsbyEndpoint;
+const NETLIFY_BUILD_HOOK_URI = Config.netlifyEndpoint;
 
 function updateGatsby() {
     console.log('Gatsby build request will be send');
 
-    Axios.post(GATSBY_BUILD_URL).then( () => {
+    Axios.post(NETLIFY_BUILD_HOOK_URI).then(() => {
         console.log('Gatsby build request was successful');
     });
 }
