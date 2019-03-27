@@ -59,7 +59,7 @@ exports.patchById = (req, res) => {
 latestRelease = function (owner, name, token) {
     console.log(`Getting latest release for: http://github.com/${owner}/${name}`);
 
-    const query = `{ \"query\": \"query { organization(login: \\\"${owner}\\\") { avatarUrl } user(login: \\\"${owner}\\\") { avatarUrl } repository(owner:\\\"${owner}\\\", name:\\\"${name}\\\") { homepageUrl description releases(first:1, orderBy: {field: CREATED_AT, direction: DESC}) { nodes { createdAt resourcePath tagName description } } watchers(first: 1) { totalCount } stargazers(first: 1) { totalCount } } }\" }`;
+    const query = `{ \"query\": \"query { organization(login: \\\"${owner}\\\") { avatarUrl } user(login: \\\"${owner}\\\") { avatarUrl } repository(owner:\\\"${owner}\\\", name:\\\"${name}\\\") { homepageUrl description repositoryTopics(first:100) { nodes { topic { name } } } releases(first:1, orderBy: {field: CREATED_AT, direction: DESC}) { nodes { createdAt resourcePath tagName description } } watchers(first: 1) { totalCount } stargazers(first: 1) { totalCount } } }\" }`;
 
     request.post({
         headers: {'User-Agent': 'Release Tracker', 'Authorization': `Bearer ${token}`},
@@ -77,6 +77,7 @@ latestRelease = function (owner, name, token) {
         let watchersCount = 0;
         let stargazersCount = 0;
         let avatarUrl = '';
+        let topics = [];
 
         if (bodyJson && bodyJson.data && bodyJson.data.repository && bodyJson.data.repository.releases
             && bodyJson.data.repository.releases.nodes
@@ -91,6 +92,8 @@ latestRelease = function (owner, name, token) {
             description = bodyJson.data.repository.description;
             watchersCount = bodyJson.data.repository.watchers.totalCount;
             stargazersCount = bodyJson.data.repository.stargazers.totalCount;
+            topics = bodyJson.data.repository.repositoryTopics.nodes;
+
             if (bodyJson.data.organization && bodyJson.data.organization.avatarUrl) {
                 avatarUrl = bodyJson.data.organization.avatarUrl;
             } else if (bodyJson.data.user && bodyJson.data.user.avatarUrl) {
@@ -107,7 +110,8 @@ latestRelease = function (owner, name, token) {
                 description: description,
                 watchersCount: watchersCount,
                 stargazersCount: stargazersCount,
-                avatarUrl: avatarUrl
+                avatarUrl: avatarUrl,
+                topics: topics
             };
 
             GitHubReleaseModel.findByOwnerAndName(owner, name)

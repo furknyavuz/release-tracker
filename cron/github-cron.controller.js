@@ -6,7 +6,7 @@ function gitHubReleasesUpdate() {
 }
 
 exports.startCronJobs = function () {
-    new CronJob('0 0 * * *', function () {
+    new CronJob('* * * * *', function () {
         gitHubReleasesUpdate();
     }, null, true, 'UTC');
 };
