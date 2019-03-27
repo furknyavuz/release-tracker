@@ -68,11 +68,9 @@ exports.list = () => {
     });
 };
 
-exports.listByGroup = (perPage, page, group) => {
+exports.listByGroup = (group) => {
     return new Promise((resolve, reject) => {
         GitHubRelease.find({group: group})
-            .limit(perPage)
-            .skip(perPage * page)
             .exec(function (err, users) {
                 if (err) {
                     reject(err);
@@ -81,23 +79,6 @@ exports.listByGroup = (perPage, page, group) => {
                 }
             })
     });
-};
-
-exports.groupList = () => {
-    return new Promise((resolve, reject) => {
-        GitHubRelease.distinct("group")
-            .exec(function (err, users) {
-                if (err) {
-                    reject(err);
-                } else {
-                    resolve(users);
-                }
-            })
-    });
-};
-
-exports.count = function(cb) {
-    return GitHubRelease.collection.countDocuments({}, cb);
 };
 
 exports.patchGitHubRelease = (id, gitHubReleaseData) => {

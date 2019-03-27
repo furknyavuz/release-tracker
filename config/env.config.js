@@ -9,5 +9,6 @@ module.exports = {
     },
     "mongoDbUri": process.env.MONGODB_URI || "mongodb://localhost/release-tracker",
     "githubEndpoint": "https://api.github.com/graphql",
+    "githubAccessToken": "2fa1cce9d1485592425ef9297e93a2f1d4ce7b24",
     "gatsbyEndpoint": "https://api.netlify.com/build_hooks/5c956202a33991f9a62144ea"
 };

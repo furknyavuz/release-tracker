@@ -3,6 +3,7 @@ const Axios = require('axios');
 const Config = require('../config/env.config');
 
 const GITHUB_API = Config.githubEndpoint;
+const GITHUB_ACCESS_TOKEN = Config.githubAccessToken;
 
 exports.insert = (req, res) => {
     GitHubReleaseModel.createGitHubRelease(req.body)
@@ -11,38 +12,17 @@ exports.insert = (req, res) => {
         });
 };
 
-exports.groupList = (req, res) => {
-    GitHubReleaseModel.groupList()
-        .then((result) => {
-            res.status(200).send(result);
-        })
-};
-
 exports.listByGroup = (req, res) => {
-    let limit = req.query.limit && req.query.limit <= 1000 ? parseInt(req.query.limit) : 1000;
-    let page = 0;
-    if (req.query) {
-        if (req.query.page) {
-            req.query.page = parseInt(req.query.page);
-            page = Number.isInteger(req.query.page) ? req.query.page : 0;
-        }
-    }
-    GitHubReleaseModel.listByGroup(limit, page, req.query.group)
+
+    GitHubReleaseModel.listByGroup(req.query.group)
         .then((result) => {
             res.status(200).send(result);
         })
 };
 
 exports.list = (req, res) => {
-    let limit = req.query.limit && req.query.limit <= 1000 ? parseInt(req.query.limit) : 1000;
-    let page = 0;
-    if (req.query) {
-        if (req.query.page) {
-            req.query.page = parseInt(req.query.page);
-            page = Number.isInteger(req.query.page) ? req.query.page : 0;
-        }
-    }
-    GitHubReleaseModel.list(limit, page)
+
+    GitHubReleaseModel.list()
         .then((result) => {
             res.status(200).send(result);
         })
@@ -85,6 +65,7 @@ async function updateDatabase(responseData, owner, name) {
         } else if (responseData.data.user && responseData.data.user.avatarUrl) {
             avatarUrl = responseData.data.user.avatarUrl;
         }
+
         const gitHubReleaseData = {
             owner: owner,
             name: name,
@@ -105,16 +86,16 @@ async function updateDatabase(responseData, owner, name) {
                 } else {
                     GitHubReleaseModel.patchGitHubRelease(oldGitHubRelease[0].id, gitHubReleaseData);
                 }
-                console.log(`Got latest release for: http://github.com${gitHubReleaseData.resourcePath}`);
+                console.log(`Updated latest release: http://github.com${gitHubReleaseData.resourcePath}`);
             });
     }
 }
 
-async function getLatestRelease(release) {
+async function getLatestRelease(repository) {
 
-    const owner = release.owner;
-    const name = release.name;
-    const token = '2fa1cce9d1485592425ef9297e93a2f1d4ce7b24';
+    const owner = repository.owner;
+    const name = repository.name;
+    const token = GITHUB_ACCESS_TOKEN;
 
     console.log(`Getting latest release for: http://github.com/${owner}/${name}`);
 
